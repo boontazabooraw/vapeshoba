@@ -1,4 +1,7 @@
 export const getShops = async (req, res) => {
+
+    const { city, minRating } = req.query;
+
     const shops = [
         {
             id: 1,
@@ -92,5 +95,15 @@ export const getShops = async (req, res) => {
         }
     ];
 
-    res.json(shops);
+    let filtered = shops;
+
+    if (city) {
+        filtered = filtered.filter(shop => shop.city.toLowerCase() === city.toLowerCase());
+    }
+
+    if (minRating) {
+        filtered = filtered.filter(shop => shop.rating >= parseFloat(minRating));
+    }
+
+    res.json(filtered);
 }
