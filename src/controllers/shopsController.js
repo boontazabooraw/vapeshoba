@@ -3,26 +3,42 @@ import supabase from '../config/supabase.js';
 
 export const getShops = async (req, res) => {
 
-    const { municipality, minRating } = req.query;
+    try {
+        const { municipality, minRating } = req.query;
 
-    let query = supabase.from('shops').select('*');
+        let query = supabase.from('shops').select('*');
 
-    if (municipality) {
-        let formatted = municipality.replace(/_/g, " ");
-        query = query.ilike('municipality', formatted);
+        if (municipality) {
+            const formatted = municipality.replace(/_/g, " ");
+            query = query.ilike('municipality', formatted);
+        }
+
+        if (minRating) {
+            const ratingNum = parseFloat(minRating);
+            if (isNaN(ratingNum)) {
+                return res.status(400).json({ error: "minRating must be a number" })
+            }
+            query = query.gte('rating', parseFloat(ratingNum));
+        }
+
+        const { data, error } = await query;
+
+        if (error) {
+            return res.status(500).json({ Error: error.message });
+        }
+
+        res.json({
+            success: true,
+            data,
+        });
+    } catch (err) {
+        res.status(500).json({
+            error: "Server error",
+            details: err.message,
+        });
     }
 
-    if (minRating) {
-        query = query.gte('rating', parseFloat(minRating));
-    }
 
-    const { data, error } = await query;
-
-    if (error) {
-        return res.status(500).json({ Error: error.message });
-    }
-
-    res.json(data);
 
     /*
     DEV ENVIRONMENT TESTING - LOCAL JSON FILE
