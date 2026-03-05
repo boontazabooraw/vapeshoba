@@ -9,7 +9,7 @@ export const getShops = async (req, res) => {
 
     if (municipality) {
         let formatted = municipality.replace(/_/g, " ");
-        query = query.eq('municipality', formatted);
+        query = query.ilike('municipality', formatted);
     }
 
     if (minRating) {
