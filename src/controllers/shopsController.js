@@ -4,10 +4,20 @@ import supabase from '../config/supabase.js';
 export const getShops = async (req, res) => {
 
     try {
-        const { municipality, minRating, sortby = "municipality", order } = req.query;
+        const { municipality, minRating, sortby = "municipality", order, page = 1, limit = 100 } = req.query;
+
+        //Pagination
+        const pageNum = parseInt(page, 10);
+        const limitNum = parseInt(limit, 10);
+        if (isNaN(pageNum) || pageNum < 1) {
+            return res.status(400).json({ error: "Invalid Page Number" });
+        }
+        if (isNaN(limitNum) || limitNum < 1 || limitNum > 100) {
+            return res.status(400).json({ error: "Limit must be between 1 and 100 only" })
+        }
 
         //Sorting validation
-        const allowedSorts = ['rating', 'name', 'municipality'];
+        const allowedSorts = ['rating', 'name', 'municipality', 'id'];
         if (!allowedSorts.includes(sortby)) {
             return res.status(400).json({ error: "Invalid sorting variable" });
         }
@@ -29,6 +39,12 @@ export const getShops = async (req, res) => {
             query = query.gte('rating', parseFloat(ratingNum));
         }
 
+        //Pagination
+        const start = (pageNum - 1) * limitNum;
+        const end = start + limitNum - 1;
+        query = query.range(start, end);
+
+        // Sorting
         const ascending = order ? order.toLowerCase() === "asc" : true;
         query = query.order(sortby, { ascending })
 
