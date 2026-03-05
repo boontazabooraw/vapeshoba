@@ -4,15 +4,23 @@ import supabase from '../config/supabase.js';
 export const getShops = async (req, res) => {
 
     try {
-        const { municipality, minRating } = req.query;
+        const { municipality, minRating, sortby = "municipality", order } = req.query;
+
+        //Sorting validation
+        const allowedSorts = ['rating', 'name', 'municipality'];
+        if (!allowedSorts.includes(sortby)) {
+            return res.status(400).json({ error: "Invalid sorting variable" });
+        }
 
         let query = supabase.from('shops').select('*');
 
+        //Municipality filter
         if (municipality) {
             const formatted = municipality.replace(/_/g, " ");
             query = query.ilike('municipality', formatted);
         }
 
+        //Rating filter
         if (minRating) {
             const ratingNum = parseFloat(minRating);
             if (isNaN(ratingNum)) {
@@ -20,6 +28,9 @@ export const getShops = async (req, res) => {
             }
             query = query.gte('rating', parseFloat(ratingNum));
         }
+
+        const ascending = order ? order.toLowerCase() === "asc" : true;
+        query = query.order(sortby, { ascending })
 
         const { data, error } = await query;
 
