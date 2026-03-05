@@ -1,4 +1,4 @@
-import shopsJson from '../mock_data.json' with {type: 'json'}
+// import shopsJson from '../mock_data.json' with {type: 'json'}
 import supabase from '../config/supabase.js';
 
 export const getShops = async (req, res) => {
@@ -8,7 +8,8 @@ export const getShops = async (req, res) => {
     let query = supabase.from('shops').select('*');
 
     if (municipality) {
-        query = query.eq('municipality', municipality);
+        let formatted = municipality.replace(/_/g, " ");
+        query = query.eq('municipality', formatted);
     }
 
     if (minRating) {
