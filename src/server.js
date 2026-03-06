@@ -1,6 +1,5 @@
 import app from "./app.js";
 import dotenv from 'dotenv';
-import cors from "cors";
 
 dotenv.config();
 
@@ -9,12 +8,7 @@ const supabaseKey = process.env.SUPABASE_KEY;
 
 const PORT = process.env.PORT || 3000;
 
-//Allow all domains and selected methods
-app.use(cors({
-    origin: "*",
-    methods: ["GET", "POST"],
-    allowedHeaders: ["Content-Type", "Authorization"]
-}));
+
 
 app.listen(PORT, () => {
     if (!supabaseUrl) {
