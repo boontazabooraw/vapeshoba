@@ -9,8 +9,6 @@ const supabaseKey = process.env.SUPABASE_KEY;
 
 const PORT = process.env.PORT || 3000;
 
-
-app.use(cors());
 //Allow all domains and selected methods
 app.use(cors({
     origin: "*",
