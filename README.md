@@ -109,14 +109,6 @@ The root endpoint supports several query parameters for filtering and sorting re
   GET https://veepsh.onrender.com?limit=10  
   ```
 
-
----
-
-## ⚠️ Notes
-- Free Render tier may sleep after inactivity (cold start delay).
-- You can use cron-jobs.org to ping the API and keep it awake.
-- This project is for practice only. It doesn’t collect personal data, so no privacy policy is needed.
-
 ---
 
 ## Tech Stack
