@@ -116,7 +116,6 @@ The root endpoint supports several query parameters for filtering and sorting re
 - Express.js
 - Supabase
 - Render
-- Vite + React (frontend testing)
 
 ---
 
