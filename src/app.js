@@ -7,7 +7,7 @@ const app = express();
 //Allow all domains and selected methods
 app.use(cors({
     origin: "*",
-    methods: ["GET", "POST"],
+    methods: ["GET"],
     allowedHeaders: ["Content-Type", "Authorization"]
 }));
 
