@@ -6,6 +6,8 @@ export const getShops = async (req, res) => {
     try {
         const { municipality, minRating, sortby = "municipality", order, page = 1, limit = 100 } = req.query;
 
+        const { count } = await supabase.from("shops").select('*', { count: "exact", head: true })
+
         //Pagination
         const pageNum = parseInt(page, 10);
         const limitNum = parseInt(limit, 10);
@@ -50,14 +52,14 @@ export const getShops = async (req, res) => {
 
         const { data, error } = await query;
 
-        let totalShops = data.length;
+        //let totalShops = data.length;
 
         if (error) {
             return res.status(500).json({ Error: error.message });
         }
 
         res.json({
-            totalShops,
+            count,
             data
         });
     } catch (err) {
