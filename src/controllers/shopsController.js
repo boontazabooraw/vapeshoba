@@ -50,12 +50,15 @@ export const getShops = async (req, res) => {
 
         const { data, error } = await query;
 
+        let totalShops = data.length;
+
         if (error) {
             return res.status(500).json({ Error: error.message });
         }
 
         res.json({
-            data,
+            totalShops,
+            data
         });
     } catch (err) {
         res.status(500).json({
