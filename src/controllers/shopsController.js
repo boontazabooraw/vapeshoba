@@ -6,9 +6,6 @@ export const getShops = async (req, res) => {
     try {
         const { municipality, minRating, sortby = "municipality", order, page = 1, limit = 100 } = req.query;
 
-        const { count } = await supabase.from("shops").select('*', { count: "exact", head: true })
-        const allShops = count;
-
         //Pagination
         const pageNum = parseInt(page, 10);
         const limitNum = parseInt(limit, 10);
@@ -25,7 +22,7 @@ export const getShops = async (req, res) => {
             return res.status(400).json({ error: "Invalid sorting variable" });
         }
 
-        let query = supabase.from('shops').select('*');
+        let query = supabase.from('shops').select('*', { count: 'exact' });
 
         //Municipality filter
         if (municipality) {
@@ -51,8 +48,9 @@ export const getShops = async (req, res) => {
         const ascending = order ? order.toLowerCase() === "asc" : true;
         query = query.order(sortby, { ascending })
 
-        const { data, error } = await query;
+        const { data, count, error } = await query;
 
+        let total = count;
         let returned = data.length;
 
         if (error) {
@@ -64,7 +62,10 @@ export const getShops = async (req, res) => {
             res.json({
                 data,
                 returned,
-                allShops
+                total,
+                page: pageNum,
+                lastPage: total / limitNum
+
             });
         } else {
             res.json({
@@ -72,7 +73,6 @@ export const getShops = async (req, res) => {
                 returned
             })
         }
-
 
     } catch (err) {
         res.status(500).json({
