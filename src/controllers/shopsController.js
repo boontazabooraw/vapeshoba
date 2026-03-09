@@ -48,10 +48,9 @@ export const getShops = async (req, res) => {
         const ascending = order ? order.toLowerCase() === "asc" : true;
         query = query.order(sortby, { ascending })
 
-        const { data, count, error } = await query;
+        const { data: shops, count: total, error } = await query;
 
-        let total = count;
-        let returned = data.length;
+        let returned = shops.length;
 
         if (error) {
             return res.status(500).json({ Error: error.message });
@@ -60,23 +59,24 @@ export const getShops = async (req, res) => {
 
         if (returned > 0) {
             res.json({
-                data,
+                shops,
                 meta: {
                     page,
                     returned,
                     total,
                     last_page: Math.ceil(total / limitNum)
                 },
-                // returned,
-                // total,
-                // page: pageNum,
-                // lastPage: total / limitNum
 
             });
         } else {
             res.json({
-                data: 'No data available',
-                returned
+                shops: 'No data available',
+                meta: {
+                    page,
+                    returned,
+                    total,
+                    last_page: Math.ceil(total / limitNum)
+                },
             })
         }
 
