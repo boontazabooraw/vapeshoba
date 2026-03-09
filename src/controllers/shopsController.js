@@ -61,10 +61,16 @@ export const getShops = async (req, res) => {
         if (returned > 0) {
             res.json({
                 data,
-                returned,
-                total,
-                page: pageNum,
-                lastPage: total / limitNum
+                meta: {
+                    page,
+                    returned,
+                    total,
+                    last_page: Math.ceil(total / limitNum)
+                },
+                // returned,
+                // total,
+                // page: pageNum,
+                // lastPage: total / limitNum
 
             });
         } else {
