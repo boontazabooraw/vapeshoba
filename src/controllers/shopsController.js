@@ -26,7 +26,7 @@ export const getShops = async (req, res) => {
 
         //Municipality filter
         if (municipality) {
-            const formatted = municipality.replace(/_/g, " ");
+            const formatted = municipality.replace(" ", /_/g);
             query = query.ilike('municipality', formatted);
         }
 
