@@ -5,6 +5,7 @@ dotenv.config();
 
 const supabaseUrl = process.env.SUPABASE_URL;
 const supabaseKey = process.env.SUPABASE_KEY;
+const mode = process.env.NODE_ENV;
 
 const PORT = process.env.PORT || 3000;
 
@@ -20,6 +21,9 @@ app.listen(PORT, () => {
     if (supabaseUrl && supabaseKey) {
         console.log('\nEnvironment variables are all set.')
     }
+
+    console.log(`Project is running on ${mode} mode...`)
+
     console.log(`\nServer running on http://localhost:${PORT}\nTo test, navigate to the route http://localhost:${PORT}\nHappy coding.\n`)
 })
 
