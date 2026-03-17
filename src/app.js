@@ -20,12 +20,11 @@ app.use(express.json());
 // Rate Limiting in production
 if (process.env.NODE_ENV === 'production') {
     const limiter = rateLimit({
-        windowMs: 15 * 6 * 1000,
+        windowMs: 15 * 60 * 1000,
         max: 100,
-        statusCode,
         standardHeaders: true,
         legacyHeaders: false,
-        message: { error: `Error ${statusCode}: Woah woah woah slow down buddy...` }
+        message: { error: "Woah woah woah slow down buddy..." }
     });
     app.use(limiter);
 }
