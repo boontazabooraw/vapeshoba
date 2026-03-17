@@ -21,7 +21,7 @@ app.use(express.json());
 if (process.env.NODE_ENV === 'production') {
     const limiter = rateLimit({
         windowMs: 15 * 60 * 1000,
-        max: 100,
+        max: 50,
         standardHeaders: true,
         legacyHeaders: false,
         message: { error: "Woah woah woah slow down buddy..." }
